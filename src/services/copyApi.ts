@@ -17,26 +17,37 @@ export const copyApi = createApi({
   }),
   tagTypes: ['Copy'],
   endpoints: (builder) => ({
-    getUserCopies: builder.query<CopyType, string>({
-      query: (userId) => `/copies`,
-      providesTags: [{ type: 'Copy', id: 'LIST' }],
+    getUserCopies: builder.query<CopyType[], void>({
+      query: () => `/copies`,
+      providesTags: ['Copy'],
     }),
-    addCopy: builder.mutation<
-      { name: string; number: string },
-      { name: string; number: string }
-    >({
-      query(pokemon) {
+    addNewCopy: builder.mutation<void, { title: string; content: string }>({
+      query(copy) {
         return {
-          url: `/info`,
+          url: `/copies`,
           method: 'POST',
-          body: pokemon,
+          body: copy,
         }
       },
-      invalidatesTags: [{ type: 'Copy', id: 'LIST' }],
+      invalidatesTags: ['Copy'],
+    }),
+    deleteCopy: builder.mutation<{ success: boolean }, number>({
+      query(id) {
+        return {
+          url: `/copies`,
+          method: 'DELETE',
+          body: id,
+        }
+      },
+      invalidatesTags: ['Copy'],
     }),
   }),
 })
 
 // Export hooks for usage in functional components, which are
 // auto-generated based on the defined endpoints
-export const { useGetUserCopiesQuery, useAddCopyMutation } = copyApi
+export const {
+  useGetUserCopiesQuery,
+  useAddNewCopyMutation,
+  useDeleteCopyMutation,
+} = copyApi
