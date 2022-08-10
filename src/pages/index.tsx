@@ -13,8 +13,6 @@ import { useGetUserCopiesQuery } from '../services/copyApi'
 const Home: NextPage = ({}: InferGetServerSidePropsType<
   typeof getServerSideProps
 >) => {
-  const { data } = useGetUserCopiesQuery('XL2')
-
   const router = useRouter()
 
   const handleStartClick = () => router.push('/auth/login')
